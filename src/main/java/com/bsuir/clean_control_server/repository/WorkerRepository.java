@@ -16,4 +16,5 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
     void updateLocation(double latitude, double longitude, String phoneNumber);
 
     List<Worker> findAllByOrder(Order order);
+    Optional<Worker> findByPhoneNumber(String phoneNumber);
 }

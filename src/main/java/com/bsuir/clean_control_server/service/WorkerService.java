@@ -3,6 +3,9 @@ package com.bsuir.clean_control_server.service;
 import com.bsuir.clean_control_server.dto.SendLocationDTO;
 import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
 import com.bsuir.clean_control_server.exception.ResourceNotFoundException;
+
+import com.bsuir.clean_control_server.exception.UserNotFoundException;
+
 import com.bsuir.clean_control_server.model.Worker;
 import com.bsuir.clean_control_server.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,4 +39,10 @@ public class WorkerService {
         Worker worker = getWorkerById(workerId);
         return new SendLocationDTO(worker.getLatitude(), worker.getLongitude());
     }
+  
+    public Worker findByPhoneNumber(String phoneNumber){
+        return workerRepository.findByPhoneNumber(phoneNumber).orElseThrow(() ->
+                new UserNotFoundException("There is no worker with phone number " + phoneNumber + " in database"));
+    }
+
 }
