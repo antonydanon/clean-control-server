@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @AllArgsConstructor
-public class WorkerLocation {
+public class ReceiveLocationDTO {
     private String phoneNumber;
     private double longitude;
     private double latitude;
