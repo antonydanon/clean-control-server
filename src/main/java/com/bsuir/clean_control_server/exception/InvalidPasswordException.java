@@ -1,7 +1,9 @@
 package com.bsuir.clean_control_server.exception;
 
-public class InvalidPasswordException extends RuntimeException {
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+
+public class InvalidPasswordException extends ExceptionWithHttpStatus{
     public InvalidPasswordException(String message) {
-        super(message);
+        super(UNAUTHORIZED, message);
     }
 }
