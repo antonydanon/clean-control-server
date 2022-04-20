@@ -18,14 +18,14 @@ public class AuthenticationService {
     private final WorkerService workerService;
 
     public Worker loginWorker(LoginRequestDTO loginRequestDTO){
-        Worker worker = workerService.findByPhoneNumber(loginRequestDTO.getPhoneNumber());
+        Worker worker = workerService.getWorkerByPhoneNumber(loginRequestDTO.getPhoneNumber());
         if(!loginRequestDTO.getPassword().equals(worker.getPassword()))
             throw new InvalidPasswordException("Invalid password");
         return worker;
     }
 
     public Manager loginManager(LoginRequestDTO loginRequestDTO){
-        Manager manager = managerService.findByPhoneNumber(loginRequestDTO.getPhoneNumber());
+        Manager manager = managerService.getManagerByPhoneNumber(loginRequestDTO.getPhoneNumber());
         if(!loginRequestDTO.getPassword().equals(manager.getPassword()))
             throw new InvalidPasswordException("Invalid password");
         return manager;
