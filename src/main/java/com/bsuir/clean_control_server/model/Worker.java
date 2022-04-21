@@ -23,6 +23,12 @@ public class Worker {
 
     private String password;
 
+    private String name;
+
+    private String surname;
+
+    private int age;
+
     private double longitude;
 
     private double latitude;
