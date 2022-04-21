@@ -1,6 +1,7 @@
 package com.bsuir.clean_control_server.controller;
 
 import com.bsuir.clean_control_server.dto.LoginRequestDTO;
+import com.bsuir.clean_control_server.dto.LoginResponseDTO;
 import com.bsuir.clean_control_server.exception.ExceptionWithHttpStatus;
 import com.bsuir.clean_control_server.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login/manager")
-    public ResponseEntity<?> loginManager(@RequestBody LoginRequestDTO loginRequestDTO)
+    public ResponseEntity<LoginResponseDTO> loginManager(@RequestBody LoginRequestDTO loginRequestDTO)
     {
         try {
             return new ResponseEntity<>( authenticationService.loginManager(loginRequestDTO),
