@@ -1,5 +1,6 @@
 package com.bsuir.clean_control_server.controller;
 
+import com.bsuir.clean_control_server.dto.QuittersDTO;
 import com.bsuir.clean_control_server.dto.SendLocationDTO;
 import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
 import com.bsuir.clean_control_server.model.Worker;
@@ -30,5 +31,10 @@ public class WorkerController {
     @GetMapping("/location/{workerId}")
     public ResponseEntity<SendLocationDTO> getWorkerLocation(@PathVariable Long workerId) {
         return ResponseEntity.ok().body(workerService.getWorkerLocation(workerId));
+    }
+
+    @GetMapping("/quitters")
+    public ResponseEntity<List<QuittersDTO>> getQuitters(@RequestParam String phone) {
+        return ResponseEntity.ok().body(workerService.getQuitters(phone));
     }
 }
