@@ -1,0 +1,3 @@
+ALTER TABLE managers
+    ADD COLUMN name VARCHAR(255),
+    ADD COLUMN surname VARCHAR(255);

@@ -1,0 +1,4 @@
+ALTER TABLE workers
+    ADD COLUMN name VARCHAR(255),
+    ADD COLUMN surname VARCHAR(255),
+    ADD COLUMN age INTEGER;
