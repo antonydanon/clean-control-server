@@ -1,5 +1,6 @@
 package com.bsuir.clean_control_server.service;
 
+import com.bsuir.clean_control_server.dto.QuittersDTO;
 import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
 import com.bsuir.clean_control_server.dto.SendLocationDTO;
 import com.bsuir.clean_control_server.exception.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.*;
@@ -45,16 +47,34 @@ public class WorkerService {
 
     public SendLocationDTO getWorkerLocation(Long workerId) {
         Worker worker = getWorkerById(workerId);
-        Order order = worker.getOrder();
-        boolean isInsideZone = isWorkerAtWork(worker.getLatitude(), worker.getLongitude(),
-                                              order.getLatitude(),order.getLongitude(),order.getRadius());
-        return new SendLocationDTO(worker.getLatitude(), worker.getLongitude(), isInsideZone);
+        return new SendLocationDTO(worker.getLatitude(), worker.getLongitude(),
+                                   isWorkerAtWork(worker, worker.getOrder()));
     }
 
-    private boolean isWorkerAtWork(double workerLat, double workerLong,
-                                   double orderLat, double orderLong, double radius ){
-        double curRadius = EARTH_RADIUS * sqrt(2) * sqrt(1 - cos(RADIANS * workerLat) * cos(RADIANS * orderLat)
-                * cos(RADIANS * (workerLong - orderLong)) - sin(RADIANS * workerLat) * sin(RADIANS * orderLat));
-        return curRadius <= radius;
+    private boolean isWorkerAtWork(Worker worker, Order order){
+        double curRadius = EARTH_RADIUS * sqrt(2)
+                * sqrt(1 - cos(RADIANS * worker.getLatitude()) * cos(RADIANS * order.getLatitude())
+                * cos(RADIANS * (worker.getLongitude() - order.getLongitude()))
+                - sin(RADIANS * worker.getLatitude()) * sin(RADIANS * order.getLatitude()));
+        return curRadius <= order.getRadius();
+    }
+
+    public List<QuittersDTO> getQuitters(String phone) {
+        List<QuittersDTO> quitters = new ArrayList<>();
+        for (Order order: orderService.getOrdersByPhone(phone)) {
+            quitters.addAll(getQuittersInOrder(order));
+        }
+        return quitters;
+    }
+
+    public List<QuittersDTO> getQuittersInOrder(Order order) {
+        List<QuittersDTO> quittersInOrder = new ArrayList<>();
+        for (Worker worker: workerRepository.findAllByOrder(order)) {
+            if (!isWorkerAtWork(worker, order))
+                quittersInOrder.add(
+                        new QuittersDTO(worker.getName(), worker.getSurname(), worker.getPhoneNumber())
+                );
+        }
+        return quittersInOrder;
     }
 }
