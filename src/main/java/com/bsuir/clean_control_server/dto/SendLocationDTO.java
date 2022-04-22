@@ -8,4 +8,5 @@ import lombok.Getter;
 public class SendLocationDTO {
     private double latitude;
     private double longitude;
+    private boolean isInsideZone;
 }
