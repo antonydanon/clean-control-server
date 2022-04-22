@@ -20,6 +20,6 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<List<Order>> getManagerOrders(@RequestParam String phone) {
-        return ResponseEntity.ok().body(orderService.getManagerOrdersByPhone(phone));
+        return ResponseEntity.ok().body(orderService.getOrdersByPhone(phone));
     }
 }

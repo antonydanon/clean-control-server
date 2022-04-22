@@ -21,7 +21,7 @@ public class OrderService {
 
     }
 
-    public List<Order> getManagerOrdersByPhone(String phone) {
+    public List<Order> getOrdersByPhone(String phone) {
         return orderRepository.findAllByManager(managerService.getManagerByPhoneNumber(phone));
     }
 }
