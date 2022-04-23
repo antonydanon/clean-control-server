@@ -23,6 +23,8 @@ public class Order {
 
     private String description;
 
+    private String address;
+
     private double radius;
 
     private double longitude;
