@@ -1,5 +1,6 @@
 package com.bsuir.clean_control_server.controller;
 
+import com.bsuir.clean_control_server.dto.WorkDayDTO;
 import com.bsuir.clean_control_server.model.Order;
 import com.bsuir.clean_control_server.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,11 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<Order>> getManagerOrders(@RequestParam String phone) {
         return ResponseEntity.ok().body(orderService.getOrdersByPhone(phone));
+    }
+
+    @GetMapping("/workDay")
+    public ResponseEntity<WorkDayDTO> getOrderWorkDay(@RequestParam String workerPhone) {
+        System.out.println("getOrderWorkDay");
+        return ResponseEntity.ok().body(orderService.getOrderWorkDay(workerPhone));
     }
 }
