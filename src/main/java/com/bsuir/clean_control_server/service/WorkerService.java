@@ -3,6 +3,7 @@ package com.bsuir.clean_control_server.service;
 import com.bsuir.clean_control_server.dto.QuittersDTO;
 import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
 import com.bsuir.clean_control_server.dto.SendLocationDTO;
+import com.bsuir.clean_control_server.dto.WorkerDTO;
 import com.bsuir.clean_control_server.exception.ResourceNotFoundException;
 import com.bsuir.clean_control_server.model.Order;
 import com.bsuir.clean_control_server.model.Worker;
@@ -41,8 +42,20 @@ public class WorkerService {
         return receiveLocationDTO;
     }
 
-    public List<Worker> getAllWorkersByOrderId(Long orderId) {
+    public List<WorkerDTO> getListOfWorkersDTO(Long orderId){
+        return convertWorkersToWorkersDTO(getAllWorkersByOrderId(orderId));
+    }
+
+    private List<Worker> getAllWorkersByOrderId(Long orderId) {
         return workerRepository.findAllByOrder(orderService.getOrderById(orderId));
+    }
+
+    private List<WorkerDTO> convertWorkersToWorkersDTO(List<Worker> workers){
+        List<WorkerDTO> workerDTOList = new ArrayList<>();
+        for (var worker : workers) {
+            workerDTOList.add(new WorkerDTO(worker, isWorkerAtWork(worker, worker.getOrder())));
+        }
+        return workerDTOList;
     }
 
     public SendLocationDTO getWorkerLocation(Long workerId) {

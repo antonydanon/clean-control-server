@@ -3,6 +3,7 @@ package com.bsuir.clean_control_server.controller;
 import com.bsuir.clean_control_server.dto.QuittersDTO;
 import com.bsuir.clean_control_server.dto.SendLocationDTO;
 import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
+import com.bsuir.clean_control_server.dto.WorkerDTO;
 import com.bsuir.clean_control_server.model.Worker;
 import com.bsuir.clean_control_server.service.WorkerService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class WorkerController {
     }
 
     @GetMapping("order/{orderId}")
-    public ResponseEntity<List<Worker>> getAllWorkersFromOrder(@PathVariable Long orderId) {
-        return ResponseEntity.ok().body(workerService.getAllWorkersByOrderId(orderId));
+    public ResponseEntity<List<WorkerDTO>> getAllWorkersFromOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok().body(workerService.getListOfWorkersDTO(orderId));
     }
 
     @GetMapping("/location/{workerId}")
