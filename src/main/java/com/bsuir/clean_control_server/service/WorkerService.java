@@ -72,7 +72,8 @@ public class WorkerService {
         for (Worker worker: workerRepository.findAllByOrder(order)) {
             if (!isWorkerAtWork(worker, order))
                 quittersInOrder.add(
-                        new QuittersDTO(worker.getName(), worker.getSurname(), worker.getPhoneNumber())
+                        new QuittersDTO(worker.getName(), worker.getSurname(),
+                                worker.getPhoneNumber(), order.getId())
                 );
         }
         return quittersInOrder;

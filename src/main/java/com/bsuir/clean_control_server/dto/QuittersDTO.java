@@ -11,4 +11,5 @@ public class QuittersDTO {
     private String name;
     private String surname;
     private String phone;
+    private Long orderId;
 }
