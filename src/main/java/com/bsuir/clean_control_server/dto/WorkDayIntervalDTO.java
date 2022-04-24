@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Getter
 @Setter
-public class WorkDayDTO {
+public class WorkDayIntervalDTO {
     private Timestamp startingTime;
     private Timestamp endingTime;
 }

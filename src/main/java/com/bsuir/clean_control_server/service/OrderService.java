@@ -1,6 +1,6 @@
 package com.bsuir.clean_control_server.service;
 
-import com.bsuir.clean_control_server.dto.WorkDayDTO;
+import com.bsuir.clean_control_server.dto.WorkDayIntervalDTO;
 import com.bsuir.clean_control_server.exception.ResourceNotFoundException;
 import com.bsuir.clean_control_server.model.Order;
 import com.bsuir.clean_control_server.model.Worker;
@@ -29,10 +29,10 @@ public class OrderService {
         return orderRepository.findAllByManager(managerService.getManagerByPhoneNumber(phone));
     }
 
-    public WorkDayDTO getOrderWorkDay(String workerPhone) {
+    public WorkDayIntervalDTO getOrderWorkDay(String workerPhone) {
         Worker worker = workerRepository.findByPhoneNumber(workerPhone).orElseThrow(() ->
                 new ResourceNotFoundException("There is no worker with phone number " + workerPhone + " in database"));
         Order order = worker.getOrder();
-        return new WorkDayDTO(order.getStartingTime(), order.getEndingTime());
+        return new WorkDayIntervalDTO(order.getStartingTime(), order.getEndingTime());
     }
 }
