@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,12 +76,13 @@ public class WorkerService {
     public List<QuittersDTO> getQuitters(String phone) {
         List<QuittersDTO> quitters = new ArrayList<>();
         for (Order order: orderService.getOrdersByPhone(phone)) {
-            quitters.addAll(getQuittersInOrder(order));
+            if (isOrderInProgress(order))
+                quitters.addAll(getQuittersInOrder(order));
         }
         return quitters;
     }
 
-    public List<QuittersDTO> getQuittersInOrder(Order order) {
+    private List<QuittersDTO> getQuittersInOrder(Order order) {
         List<QuittersDTO> quittersInOrder = new ArrayList<>();
         for (Worker worker: workerRepository.findAllByOrder(order)) {
             if (!isWorkerAtWork(worker, order))
@@ -90,5 +92,10 @@ public class WorkerService {
                 );
         }
         return quittersInOrder;
+    }
+
+    private boolean isOrderInProgress(Order order) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        return !order.getStartingTime().after(now) && !order.getEndingTime().before(now);
     }
 }
