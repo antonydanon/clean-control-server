@@ -17,8 +17,8 @@ public interface WorkerRepository extends JpaRepository<Worker, Long> {
     void updateLocation(double latitude, double longitude, String phoneNumber);
 
     @Modifying
-    @Query("update Worker w set w.videoStatus = ?1 where w.id = ?2")
-    void updateVideoStatus(Boolean videoStatus, Long workerId);
+    @Query("update Worker w set w.showingBroadcast = ?1 where w.id = ?2")
+    void updateShowingBroadcast(boolean showingBroadcast, Long workerId);
 
     List<Worker> findAllByOrder(Order order);
     Optional<Worker> findByPhoneNumber(String phoneNumber);
