@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class VideoStatusDTO {
-    private Boolean videoStatus;
+public class ShowingBroadcastDTO {
     private Long workerId;
+    private Boolean showingBroadcast;
 }

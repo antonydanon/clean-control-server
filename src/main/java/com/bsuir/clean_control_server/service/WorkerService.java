@@ -1,6 +1,6 @@
 package com.bsuir.clean_control_server.service;
 
-import com.bsuir.clean_control_server.dto.VideoStatusDTO;
+import com.bsuir.clean_control_server.dto.ShowingBroadcastDTO;
 import com.bsuir.clean_control_server.dto.WorkerDTO;
 import com.bsuir.clean_control_server.dto.QuittersDTO;
 import com.bsuir.clean_control_server.dto.SendLocationDTO;
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.*;
-import static java.lang.Math.sin;
 
 @Service
 @Transactional
@@ -102,8 +101,8 @@ public class WorkerService {
         return !order.getStartingTime().after(now) && !order.getEndingTime().before(now);
     }
 
-    public String changeVideoStatus(VideoStatusDTO videoStatusDTO){
-        workerRepository.updateVideoStatus(videoStatusDTO.getVideoStatus(), videoStatusDTO.getWorkerId());
-        return "Change video status";
+    public ShowingBroadcastDTO updateShowingBroadcast(ShowingBroadcastDTO showingBroadcastDTO){
+        workerRepository.updateShowingBroadcast(showingBroadcastDTO.getShowingBroadcast(), showingBroadcastDTO.getWorkerId());
+        return showingBroadcastDTO;
     }
 }

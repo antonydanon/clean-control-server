@@ -1,11 +1,10 @@
 package com.bsuir.clean_control_server.controller;
 
 import com.bsuir.clean_control_server.dto.QuittersDTO;
-import com.bsuir.clean_control_server.dto.VideoStatusDTO;
+import com.bsuir.clean_control_server.dto.ShowingBroadcastDTO;
 import com.bsuir.clean_control_server.dto.WorkerDTO;
 import com.bsuir.clean_control_server.dto.SendLocationDTO;
 import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
-import com.bsuir.clean_control_server.model.Worker;
 import com.bsuir.clean_control_server.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,7 +40,7 @@ public class WorkerController {
     }
 
     @PostMapping("/changeVideoStatus")
-    public ResponseEntity<?> changeVideoStatus(@RequestBody VideoStatusDTO videoStatusDTO) {
-        return new ResponseEntity<>(workerService.changeVideoStatus(videoStatusDTO), HttpStatus.OK);
+    public ResponseEntity<ShowingBroadcastDTO> changeVideoStatus(@RequestBody ShowingBroadcastDTO showingBroadcastDTO) {
+        return ResponseEntity.ok().body(workerService.updateShowingBroadcast(showingBroadcastDTO));
     }
 }
