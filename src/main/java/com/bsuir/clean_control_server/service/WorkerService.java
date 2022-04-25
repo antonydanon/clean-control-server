@@ -1,10 +1,12 @@
 package com.bsuir.clean_control_server.service;
 
-import com.bsuir.clean_control_server.dto.QuittersDTO;
-import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
-import com.bsuir.clean_control_server.dto.SendLocationDTO;
+import com.bsuir.clean_control_server.dto.VideoStatusDTO;
 import com.bsuir.clean_control_server.dto.WorkerDTO;
+import com.bsuir.clean_control_server.dto.QuittersDTO;
+import com.bsuir.clean_control_server.dto.SendLocationDTO;
+import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
 import com.bsuir.clean_control_server.exception.ResourceNotFoundException;
+
 import com.bsuir.clean_control_server.model.Order;
 import com.bsuir.clean_control_server.model.Worker;
 import com.bsuir.clean_control_server.repository.WorkerRepository;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.*;
+import static java.lang.Math.sin;
 
 @Service
 @Transactional
@@ -62,7 +65,7 @@ public class WorkerService {
     public SendLocationDTO getWorkerLocation(Long workerId) {
         Worker worker = getWorkerById(workerId);
         return new SendLocationDTO(worker.getLatitude(), worker.getLongitude(),
-                                   isWorkerAtWork(worker, worker.getOrder()));
+                isWorkerAtWork(worker, worker.getOrder()));
     }
 
     private boolean isWorkerAtWork(Worker worker, Order order){
@@ -97,5 +100,10 @@ public class WorkerService {
     private boolean isOrderInProgress(Order order) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         return !order.getStartingTime().after(now) && !order.getEndingTime().before(now);
+    }
+
+    public String changeVideoStatus(VideoStatusDTO videoStatusDTO){
+        workerRepository.updateVideoStatus(videoStatusDTO.getVideoStatus(), videoStatusDTO.getWorkerId());
+        return "Change video status";
     }
 }
