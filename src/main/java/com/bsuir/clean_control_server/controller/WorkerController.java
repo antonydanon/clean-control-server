@@ -7,6 +7,7 @@ import com.bsuir.clean_control_server.dto.SendLocationDTO;
 import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
 import com.bsuir.clean_control_server.service.WorkerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/workers")
 @RequiredArgsConstructor
+@Slf4j
 public class WorkerController {
     private final WorkerService workerService;
 
@@ -39,8 +41,8 @@ public class WorkerController {
         return ResponseEntity.ok().body(workerService.getQuitters(phone));
     }
 
-    @PostMapping("/changeVideoStatus")
-    public ResponseEntity<ShowingBroadcastDTO> changeVideoStatus(@RequestBody ShowingBroadcastDTO showingBroadcastDTO) {
+    @PostMapping("/broadcast")
+    public ResponseEntity<ShowingBroadcastDTO> updateShowingBroadcast(@RequestBody ShowingBroadcastDTO showingBroadcastDTO) {
         return ResponseEntity.ok().body(workerService.updateShowingBroadcast(showingBroadcastDTO));
     }
 }
