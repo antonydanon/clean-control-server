@@ -10,5 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class WorkerDTO {
     private Worker worker;
-    private boolean isWorking;
+    private Boolean isWorking;
 }
