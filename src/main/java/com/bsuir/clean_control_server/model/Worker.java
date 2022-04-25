@@ -35,7 +35,7 @@ public class Worker {
 
     private Timestamp time;
 
-    private Boolean videoStatus;
+    private boolean showingBroadcast;
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
