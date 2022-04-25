@@ -23,26 +23,31 @@ public class WorkerController {
 
     @PostMapping("/newLocation")
     public ResponseEntity<ReceiveLocationDTO> newLocation(@RequestBody ReceiveLocationDTO receiveLocationDTO) {
+        log.info("Updating location of worker with phone = " + receiveLocationDTO.getPhoneNumber());
         return new ResponseEntity<>(workerService.newLocation(receiveLocationDTO), HttpStatus.OK);
     }
 
     @GetMapping("order/{orderId}")
     public ResponseEntity<List<WorkerDTO>> getAllWorkersFromOrder(@PathVariable Long orderId) {
+        log.info("Getting all workers of order id = " + orderId);
         return ResponseEntity.ok().body(workerService.getListOfWorkersDTO(orderId));
     }
 
     @GetMapping("/location/{workerId}")
     public ResponseEntity<SendLocationDTO> getWorkerLocation(@PathVariable Long workerId) {
+        log.info("Getting location of worker ID = " + workerId);
         return ResponseEntity.ok().body(workerService.getWorkerLocation(workerId));
     }
 
     @GetMapping("/quitters")
     public ResponseEntity<List<QuittersDTO>> getQuitters(@RequestParam String phone) {
+        log.info("Getting quitters of manager with phone: " + phone);
         return ResponseEntity.ok().body(workerService.getQuitters(phone));
     }
 
     @PostMapping("/broadcast")
     public ResponseEntity<ShowingBroadcastDTO> updateShowingBroadcast(@RequestBody ShowingBroadcastDTO showingBroadcastDTO) {
+        log.info("Updating showingBroadcast of worker with id = " + showingBroadcastDTO.getWorkerId() + " to " + showingBroadcastDTO.getShowingBroadcast());
         return ResponseEntity.ok().body(workerService.updateShowingBroadcast(showingBroadcastDTO));
     }
 }
