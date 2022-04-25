@@ -1,10 +1,6 @@
 package com.bsuir.clean_control_server.service;
 
-import com.bsuir.clean_control_server.dto.ShowingBroadcastDTO;
-import com.bsuir.clean_control_server.dto.WorkerDTO;
-import com.bsuir.clean_control_server.dto.QuittersDTO;
-import com.bsuir.clean_control_server.dto.SendLocationDTO;
-import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
+import com.bsuir.clean_control_server.dto.*;
 import com.bsuir.clean_control_server.exception.ResourceNotFoundException;
 
 import com.bsuir.clean_control_server.model.Order;
@@ -40,9 +36,9 @@ public class WorkerService {
                 new ResourceNotFoundException("There is no worker with phone number " + phoneNumber + " in database"));
     }
 
-    public ReceiveLocationDTO newLocation(ReceiveLocationDTO receiveLocationDTO){
+    public StartBroadcastDTO updateWorkerLocation(ReceiveLocationDTO receiveLocationDTO){
         workerRepository.updateLocation(receiveLocationDTO.getLatitude(), receiveLocationDTO.getLongitude(), receiveLocationDTO.getPhoneNumber());
-        return receiveLocationDTO;
+        return new StartBroadcastDTO(getWorkerByPhoneNumber(receiveLocationDTO.getPhoneNumber()).isShowingBroadcast());
     }
 
     public List<WorkerDTO> getListOfWorkersDTO(Long orderId){

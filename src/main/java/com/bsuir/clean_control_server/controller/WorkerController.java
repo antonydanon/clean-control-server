@@ -1,14 +1,9 @@
 package com.bsuir.clean_control_server.controller;
 
-import com.bsuir.clean_control_server.dto.QuittersDTO;
-import com.bsuir.clean_control_server.dto.ShowingBroadcastDTO;
-import com.bsuir.clean_control_server.dto.WorkerDTO;
-import com.bsuir.clean_control_server.dto.SendLocationDTO;
-import com.bsuir.clean_control_server.dto.ReceiveLocationDTO;
+import com.bsuir.clean_control_server.dto.*;
 import com.bsuir.clean_control_server.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +17,9 @@ public class WorkerController {
     private final WorkerService workerService;
 
     @PostMapping("/newLocation")
-    public ResponseEntity<ReceiveLocationDTO> newLocation(@RequestBody ReceiveLocationDTO receiveLocationDTO) {
+    public ResponseEntity<StartBroadcastDTO> updateWorkerLocation(@RequestBody ReceiveLocationDTO receiveLocationDTO) {
         log.info("Updating location of worker with phone = " + receiveLocationDTO.getPhoneNumber());
-        return new ResponseEntity<>(workerService.newLocation(receiveLocationDTO), HttpStatus.OK);
+        return ResponseEntity.ok().body(workerService.updateWorkerLocation(receiveLocationDTO));
     }
 
     @GetMapping("order/{orderId}")
