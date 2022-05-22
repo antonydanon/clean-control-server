@@ -2,7 +2,6 @@ package com.bsuir.clean_control_server.service;
 
 import com.bsuir.clean_control_server.dto.*;
 import com.bsuir.clean_control_server.exception.ResourceNotFoundException;
-
 import com.bsuir.clean_control_server.model.Order;
 import com.bsuir.clean_control_server.model.Worker;
 import com.bsuir.clean_control_server.repository.WorkerRepository;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.*;
@@ -31,30 +29,20 @@ public class WorkerService {
                 new ResourceNotFoundException("Worker with id: " + workerId + " doesn't exists in database"));
     }
 
-    public Worker getWorkerByPhoneNumber(String phoneNumber){
+    public Worker getWorkerByPhoneNumber(String phoneNumber) {
         return workerRepository.findByPhoneNumber(phoneNumber).orElseThrow(() ->
                 new ResourceNotFoundException("There is no worker with phone number " + phoneNumber + " in database"));
     }
 
-    public StartBroadcastDTO updateWorkerLocation(ReceiveLocationDTO receiveLocationDTO){
+    public StartBroadcastDTO updateWorkerLocation(ReceiveLocationDTO receiveLocationDTO) {
         workerRepository.updateLocation(receiveLocationDTO.getLatitude(), receiveLocationDTO.getLongitude(), receiveLocationDTO.getPhoneNumber());
         return new StartBroadcastDTO(getWorkerByPhoneNumber(receiveLocationDTO.getPhoneNumber()).isShowingBroadcast());
     }
 
-    public List<WorkerDTO> getListOfWorkersDTO(Long orderId){
-        return convertWorkersToWorkersDTO(getAllWorkersByOrderId(orderId));
-    }
-
-    private List<Worker> getAllWorkersByOrderId(Long orderId) {
-        return workerRepository.findAllByOrder(orderService.getOrderById(orderId));
-    }
-
-    private List<WorkerDTO> convertWorkersToWorkersDTO(List<Worker> workers){
-        List<WorkerDTO> workerDTOList = new ArrayList<>();
-        for (var worker : workers) {
-            workerDTOList.add(new WorkerDTO(worker, isWorkerAtWork(worker, worker.getOrder())));
-        }
-        return workerDTOList;
+    public List<WorkerDTO> getListOfWorkersDTO(Long orderId) {
+        return workerRepository.findAllByOrder(orderService.getOrderById(orderId)).stream()
+                .map(worker -> new WorkerDTO(worker, isWorkerAtWork(worker, worker.getOrder())))
+                .toList();
     }
 
     public SendLocationDTO getWorkerLocation(Long workerId) {
@@ -63,7 +51,7 @@ public class WorkerService {
                 isWorkerAtWork(worker, worker.getOrder()));
     }
 
-    private boolean isWorkerAtWork(Worker worker, Order order){
+    private boolean isWorkerAtWork(Worker worker, Order order) {
         double curRadius = EARTH_RADIUS * sqrt(2)
                 * sqrt(1 - cos(RADIANS * worker.getLatitude()) * cos(RADIANS * order.getLatitude())
                 * cos(RADIANS * (worker.getLongitude() - order.getLongitude()))
@@ -72,24 +60,20 @@ public class WorkerService {
     }
 
     public List<QuittersDTO> getQuitters(String phone) {
-        List<QuittersDTO> quitters = new ArrayList<>();
-        for (Order order: orderService.getOrdersByPhone(phone)) {
-            if (isOrderInProgress(order))
-                quitters.addAll(getQuittersInOrder(order));
-        }
-        return quitters;
+        return orderService.getOrdersByPhone(phone).stream()
+                .filter(this::isOrderInProgress)
+                .flatMap(order -> getQuittersInOrder(order).stream())
+                .toList();
     }
 
     private List<QuittersDTO> getQuittersInOrder(Order order) {
-        List<QuittersDTO> quittersInOrder = new ArrayList<>();
-        for (Worker worker: workerRepository.findAllByOrder(order)) {
-            if (!isWorkerAtWork(worker, order))
-                quittersInOrder.add(
-                        new QuittersDTO(worker.getName(), worker.getSurname(),
-                                worker.getPhoneNumber(), order.getId())
-                );
-        }
-        return quittersInOrder;
+        return workerRepository.findAllByOrder(order).stream()
+                .filter(worker -> !isWorkerAtWork(worker, order))
+                .map(quitter -> new QuittersDTO(
+                        quitter.getName(),
+                        quitter.getSurname(),
+                        quitter.getPhoneNumber(),
+                        order.getId())).toList();
     }
 
     private boolean isOrderInProgress(Order order) {
@@ -97,7 +81,7 @@ public class WorkerService {
         return !order.getStartingTime().after(now) && !order.getEndingTime().before(now);
     }
 
-    public ShowingBroadcastDTO updateShowingBroadcast(ShowingBroadcastDTO showingBroadcastDTO){
+    public ShowingBroadcastDTO updateShowingBroadcast(ShowingBroadcastDTO showingBroadcastDTO) {
         workerRepository.updateShowingBroadcast(showingBroadcastDTO.getShowingBroadcast(), showingBroadcastDTO.getWorkerId());
         return showingBroadcastDTO;
     }
